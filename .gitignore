@@ -8,3 +8,5 @@ lua-*
 LuaJIT-*
 docs/doxygen/
 docs/_build/
+libs/boost_1_75_0
+boost_1_75_0.zip

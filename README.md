@@ -420,6 +420,9 @@ l.dofile("./scripts/custom.lua"); // eg. accesing a non-existing file will invok
 ```
 
 ## run test
+
+先安装lua：http://www.lua.org/versions.html#5.3
+
 ```
 mkdir build
 cd build
@@ -430,4 +433,14 @@ ctest
 If you don't want to use the default (system) library, add these 3 options to the cmake command
 ```
 cmake -DLUA_INCLUDE_DIRS=path/to/lua/header/dir -DLUA_LIBRARY_DIRS=/abspath/to/lua/library/dir -DLUA_LIBRARIES=lualibname
+
+INSTALL_TOP= /usr/local
+INSTALL_BIN= $(INSTALL_TOP)/bin
+INSTALL_INC= $(INSTALL_TOP)/include
+INSTALL_LIB= $(INSTALL_TOP)/lib
+INSTALL_MAN= $(INSTALL_TOP)/man/man1
+INSTALL_LMOD= $(INSTALL_TOP)/share/lua/$V
+INSTALL_CMOD= $(INSTALL_TOP)/lib/lua/$V
+
+cmake -DLUA_INCLUDE_DIRS=/usr/local/include/ -DLUA_LIBRARY_DIRS=/usr/local/lib -DLUA_LIBRARIES=liblua.a
 ```

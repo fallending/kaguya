@@ -1,3 +1,4 @@
+package.cpath = package.cpath .. ";?.dylib"
 
 hello_module = require('hello_lua_module')
 
