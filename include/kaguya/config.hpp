@@ -11,6 +11,7 @@ extern "C" {
 #include <lualib.h>
 }
 
+/// should be always cpp11 ！！！！！
 #ifndef KAGUYA_USE_CPP11
 #if defined(__cpp_decltype) || __cplusplus >= 201103L ||                       \
     (defined(_MSC_VER) && _MSC_VER >= 1800)

@@ -1,6 +1,13 @@
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+
 cmake_minimum_required(VERSION 2.6)
 project(Kaguya)
+
+cmake_policy(SET CMP0042 NEW)
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+set(CMAKE_MACOSX_RPATH 1)
+endif()
 
 include(cmake/FindLua.cmake)
 
@@ -14,10 +21,11 @@ include_directories(SYSTEM ${LUA_INCLUDE_DIRS})
 link_directories(${LUA_LIBRARY_DIRS})
 
 
-find_package(Boost)
-if(Boost_INCLUDE_DIR)
-include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-endif(Boost_INCLUDE_DIR)
+# remove boost
+# find_package(Boost)
+# if(Boost_INCLUDE_DIR)
+# include_directories(SYSTEM ${Boost_INCLUDE_DIR})
+# endif(Boost_INCLUDE_DIR)
 
 
 if(KAGUYA_SINGLE_HEADER_VERSION)
