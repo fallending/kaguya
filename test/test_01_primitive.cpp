@@ -150,9 +150,9 @@ KAGUYA_TEST_FUNCTION_DEF(nilAndNull)(kaguya::State &state) {
   TEST_EQUAL(state["value"], 0);
   TEST_COMPARE_NE(state["value"], (void *)0);
   TEST_COMPARE_NE(state["value"], kaguya::NilValue());
-#if KAGUYA_USE_CPP11
-  TEST_COMPARE_NE(state["value"], nullptr);
-#endif
+// #if KAGUYA_USE_CPP11
+//   TEST_COMPARE_NE(state["value"], nullptr);
+// #endif
 
   state("value = nil");
   TEST_CHECK(!state["value"]);
@@ -163,9 +163,9 @@ KAGUYA_TEST_FUNCTION_DEF(nilAndNull)(kaguya::State &state) {
   TEST_EQUAL(state["value"], (void *)0);
   TEST_COMPARE_NE(state["value"], 0);
   TEST_EQUAL(state["value"], kaguya::NilValue());
-#if KAGUYA_USE_CPP11
-  TEST_EQUAL(state["value"], nullptr);
-#endif
+// #if KAGUYA_USE_CPP11
+//   TEST_EQUAL(state["value"], nullptr);
+// #endif
 }
 
 KAGUYA_TEST_FUNCTION_DEF(optional_set)(kaguya::State &state) {

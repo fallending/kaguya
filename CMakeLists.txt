@@ -54,7 +54,9 @@ if(NOT MSVC)#-Wall nonsense on MSVC
   add_definitions(-Wno-variadic-macros)
   add_definitions ("-Wno-unused-local-typedefs")
   add_definitions ("-Wno-unknown-warning-option")
-  #add_definitions("-std=c++11")
+  add_definitions ("-Wno-self-assign-overloaded")
+  add_definitions ("-Wno-return-std-move")
+  add_definitions("-std=c++11")
 endif(NOT MSVC)
 
 

@@ -3,7 +3,6 @@ C++ binding to Lua
 
 Licensed under [Boost Software License](http://www.boost.org/LICENSE_1_0.txt)
 
-
 ## Requirements
 - Lua 5.1 to 5.3 (recommended: 5.3)
 - C++03 compiler with boost library or C++11 compiler(gcc 4.8+,clang 3.4+,MSVC2015) without boost.
@@ -419,28 +418,89 @@ l.setErrorHandler(HandleError);
 l.dofile("./scripts/custom.lua"); // eg. accesing a non-existing file will invoke HandleError above
 ```
 
-## run test
+## MAC下测试记录
 
-先安装lua：http://www.lua.org/versions.html#5.3
+### 先安装lua：http://www.lua.org/versions.html#5.3
+
+### 回到工程目录下
 
 ```
 mkdir build
 cd build
-cmake ..
+cmake .. -DLUA_INCLUDE_DIRS=/usr/local/include/ -DLUA_LIBRARY_DIRS=/usr/local/lib -DLUA_LIBRARIES=liblua.a
 make
 ctest
 ```
-If you don't want to use the default (system) library, add these 3 options to the cmake command
+
+- config
+
 ```
-cmake -DLUA_INCLUDE_DIRS=path/to/lua/header/dir -DLUA_LIBRARY_DIRS=/abspath/to/lua/library/dir -DLUA_LIBRARIES=lualibname
+build git:(master) ✗ cmake .. -DLUA_INCLUDE_DIRS=/usr/local/include/ -DLUA_LIBRARY_DIRS=/usr/local/lib -DLUA_LIBRARIES=liblua.a
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/lilithgames/Desktop/binarts/kaguya/build
+```
 
-INSTALL_TOP= /usr/local
-INSTALL_BIN= $(INSTALL_TOP)/bin
-INSTALL_INC= $(INSTALL_TOP)/include
-INSTALL_LIB= $(INSTALL_TOP)/lib
-INSTALL_MAN= $(INSTALL_TOP)/man/man1
-INSTALL_LMOD= $(INSTALL_TOP)/share/lua/$V
-INSTALL_CMOD= $(INSTALL_TOP)/lib/lua/$V
+- build
 
-cmake -DLUA_INCLUDE_DIRS=/usr/local/include/ -DLUA_LIBRARY_DIRS=/usr/local/lib -DLUA_LIBRARIES=liblua.a
+```
+build git:(master) ✗ make
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/lilithgames/Desktop/binarts/kaguya/build
+[  4%] Building CXX object examples/CMakeFiles/lua_exec.dir/lua_exec.cpp.o
+[  8%] Linking CXX executable lua_exec
+[  8%] Built target lua_exec
+[ 12%] Building CXX object examples/CMakeFiles/hello_lua_module_experimental.dir/hello_lua_module_experimental.cpp.o
+[ 16%] Linking CXX shared library hello_lua_module_experimental.dylib
+[ 16%] Built target hello_lua_module_experimental
+[ 20%] Building CXX object examples/CMakeFiles/hello_lua_module.dir/hello_lua_module.cpp.o
+[ 24%] Linking CXX shared library hello_lua_module.dylib
+[ 24%] Built target hello_lua_module
+[ 28%] Building CXX object examples/CMakeFiles/hello_world.dir/hello_world.cpp.o
+[ 32%] Linking CXX executable hello_world
+[ 32%] Built target hello_world
+[ 36%] Building CXX object test/CMakeFiles/test_runner.dir/test_01_primitive.cpp.o
+[ 40%] Building CXX object test/CMakeFiles/test_runner.dir/test_02_classreg.cpp.o
+[ 44%] Building CXX object test/CMakeFiles/test_runner.dir/test_03_function.cpp.o
+[ 48%] Building CXX object test/CMakeFiles/test_runner.dir/test_04_lua_function.cpp.o
+[ 52%] Building CXX object test/CMakeFiles/test_runner.dir/test_05_lua_ref.cpp.o
+[ 56%] Building CXX object test/CMakeFiles/test_runner.dir/test_06_state.cpp.o
+[ 60%] Building CXX object test/CMakeFiles/test_runner.dir/test_07_vector_map_to_luatable.cpp.o
+[ 64%] Building CXX object test/CMakeFiles/test_runner.dir/test_08_optional.cpp.o
+[ 68%] Building CXX object test/CMakeFiles/test_runner.dir/test_09_utility.cpp.o
+[ 72%] Building CXX object test/CMakeFiles/test_runner.dir/test_10_loadfile.cpp.o
+[ 76%] Building CXX object test/CMakeFiles/test_runner.dir/test_11_cxx11_feature.cpp.o
+[ 80%] Building CXX object test/CMakeFiles/test_runner.dir/test_12_push_any.cpp.o
+[ 84%] Building CXX object test/CMakeFiles/test_runner.dir/test_13_another_binding_api.cpp.o
+[ 88%] Building CXX object test/CMakeFiles/test_runner.dir/test_14_error_message.cpp.o
+[ 92%] Building CXX object test/CMakeFiles/test_runner.dir/test_20_max_arg_20.cpp.o
+[ 96%] Building CXX object test/CMakeFiles/test_runner.dir/test_main.cpp.o
+[100%] Linking CXX executable test_runner
+[100%] Built target test_runner
+```
+
+- test
+
+```
+build git:(master) ✗ ctest
+
+Test project /Users/lilithgames/Desktop/binarts/kaguya/build
+    Start 1: test_runner
+1/1 Test #1: test_runner ......................   Passed    1.37 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   1.38 sec
+```
+
+- example
+
+```
+examples git:(master) ✗ make hello_lua_module
+[ 50%] Built target lua_exec
+[100%] Built target hello_lua_module
+examples git:(master) ✗ chmod 777 hello_lua_module.sh
+examples git:(master) ✗ ./hello_lua_module.sh 
+hello cpp module
 ```
