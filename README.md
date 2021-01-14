@@ -1,27 +1,14 @@
 # Kaguya
-C++ binding to Lua
+> C++ binding to Lua
 
-Licensed under [Boost Software License](http://www.boost.org/LICENSE_1_0.txt)
-
-## Requirements
-- Lua 5.1 to 5.3 (recommended: 5.3)
-- C++03 compiler with boost library or C++11 compiler(gcc 4.8+,clang 3.4+,MSVC2015) without boost.
-
-### Tested Environment
-* luajit,lua5.2,clang 3.4,gcc4.8,-std=c++03 with boost library,-std=c++11
-[![Build Status](https://travis-ci.org/satoren/kaguya.svg?branch=master)](https://travis-ci.org/satoren/kaguya)
-* lua5.3,Visual C++2008～2012 with boost library,Visual C++2013,Visual C++2015
-[![Build status](https://ci.appveyor.com/api/projects/status/cwlu28s42leacidx/branch/master?svg=true)](https://ci.appveyor.com/project/satoren/kaguya)
-
-[![Coverage Status](https://coveralls.io/repos/github/satoren/kaguya/badge.svg?branch=master)](https://coveralls.io/github/satoren/kaguya?branch=master)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/8930/badge.svg)](https://scan.coverity.com/projects/satoren-kaguya)
-
-## Introduction
 Kaguya is a Lua binding library for C++
 - header-file only
 - seamless access to lua elements
 
-## Usage
+## 环境需要
+- Lua 5.3
+- C++11
+## 使用
 add "kaguya/include" directory to "header search path" of your project.
 
 Or generate single header file and add it to your project.
@@ -30,7 +17,7 @@ cd  utils
 python generate_one_header.py > ../kaguya.hpp
 ```
 
-### Create Lua context
+### 1. Create Lua context
 ```c++
 #include "kaguya/kaguya.hpp"
 int main()
@@ -40,7 +27,7 @@ int main()
 }
 ```
 
-### Or use an existing lua state
+### 2. Use an existing lua state
 ```c++
 extern "C" int luaopen_modulename(lua_State *L)
 {
@@ -51,7 +38,7 @@ extern "C" int luaopen_modulename(lua_State *L)
 }
 ```
 
-### Runnig Lua code
+### 3. Runnig Lua code
 ```c++
 kaguya::State state;
 state("a = 'test'");//load and execute from string
@@ -63,7 +50,7 @@ kaguya::LuaFunction f2 = state.loadstring("a = 'test'");//load string without ex
 f2();//execute
 ```
 
-### Accessing values
+### 4. Accessing values
 ```c++
 kaguya::State state;
 state("a = \"test\"");
@@ -79,7 +66,7 @@ state("assert(tbl[2] == 'test')");
 state("assert(tbl['key'] == 'value')");
 ```
 
-### Retain Lua value from C++
+### 5. Retain Lua value from C++
 LuaRef type is like a Variant type.
 You can use it for holding a Lua-value in native code.
 ```c++
@@ -94,7 +81,7 @@ tbl["value"] = 1;//tbl.value = 1 in lua
 state("assert(tbl.value == 1)");
 ```
 
-## Call lua function
+## 6. Call lua function
 ```c++
 int ret = state["math"]["abs"](-32);//call math.abs of Lua function
 assert(ret == 32);
@@ -103,7 +90,7 @@ auto ret = state["math"]["abs"].call<int>(-32);//call math.abs of Lua function
 assert(ret == 32);
 ```
 
-### Multiple Results from Lua
+### 7. Multiple Results from Lua
 ```c++
 state("multresfun =function() return 1,2,4 end");//registering multiple results function
 int a, b, c;
@@ -116,7 +103,7 @@ TEST_EQUAL(std::get<1>(result_tuple), 2);
 TEST_EQUAL(std::get<2>(result_tuple), 4);
 ```
 
-### Registering Classes
+### 8. Registering Classes
 ```c++
 struct ABC
 {
@@ -149,7 +136,7 @@ assert(30 == abc:get_value())
 abc:overload() -- call overload1
 abc:overload(1) --call overload2
 ```
-#### Registering inheritance
+#### 9. Registering inheritance
 ```c++
 struct Base
 {
@@ -191,7 +178,7 @@ state["base_function"](&derived);//Base arguments function
 state("assert(1 == derived:a())");//accessing Base member
 ```
 
-#### Registering object instance
+#### 10. Registering object instance
 ```c++
 state["ABC"].setClass(kaguya::UserdataMetatable<ABC>()
 	.setConstructors<ABC(),ABC(int)>()
@@ -209,7 +196,7 @@ state("assert(43 == copy_abc:get_value())");
 state["shared_abc"] = kaguya::standard::shared_ptr<ABC>(new ABC(43));//kaguya::standard::shared_ptr is std::shared_ptr or boost::shared_ptr.
 state("assert(43 == shared_abc:get_value())");
 ```
-#### Object lifetime
+#### 11. Object lifetime
 ```c++
 state["Base"].setClass(kaguya::UserdataMetatable<Base>());
 Base base;
@@ -223,7 +210,7 @@ state["b"] = base;
 state["b"] = static_cast<Base const&>(base);
 
 ```
-### Registering function
+### 12. Registering function
 ```c++
 void c_free_standing_function(int v){std::cout <<"c_free_standing_function called:" << v << std::endl;}
 state["fun"] = &c_free_standing_function;
@@ -244,7 +231,7 @@ state("overload(2)");//int version
 state("overload('2')");//string version
 
 ```
-#### Registering function with default arguments
+#### 13. Registering function with default arguments
 
 ```c++
 //free function
@@ -280,21 +267,21 @@ state.dostring("assert(test:defargfn(6,5) == 30)");
 state.dostring("assert(test:defargfn(2,2,2) == 8)");
 ```
 
-#### Variadic arguments function
+#### 14. Variadic arguments function
 ```c++
 state["va_fun"] = kaguya::function([](kaguya::VariadicArgType args) {for (auto v : args) { std::cout << v.get<std::string>() << ","; }std::cout << std::endl; });//C++11 lambda
 state("va_fun(3,4,6,\"text\",6,444)");//3,4,6,text,6,444,
 
 ```
 
-#### Multiple Results to Lua
+#### 15. Multiple Results to Lua
 If return type of function is tuple, it returns multiple results to Lua
 ```c++
 state["multireturn"] = kaguya::function([]() { return std::tuple<int, int>(32, 34); });
 state("print(multireturn())");//32    34
 ```
 
-#### Nil values
+#### 16. Nil values
 Luas `nil` converts to `nullptr` or 0 for pointer types, can be checked for with `isNilref()` and is different than the integer `0`.
 When you want to pass `nil` to lua either pass `nullptr`/`(void*)0` or `kaguya::NilValue`.
 ```c++
@@ -315,7 +302,7 @@ assert(state["value"] != kaguya::NilValue());
 assert(state["value"] != nullptr);
 ```
 
-#### Coroutine
+#### 17. Coroutine
 ```c++
 kaguya::LuaThread cor = state.newThread();
 state("corfun = function(arg)"
@@ -343,7 +330,7 @@ while(!cor2.isThreadDead())
 ```
 
 
-### Automatic type conversion
+### 18. Automatic type conversion
 std::map and std::vector will be converted to a lua-table by default
 ```c++
 kaguya::State s;
@@ -376,7 +363,7 @@ cat     124
 apple   3
 ```
 
-#### Type conversion customization
+#### 19. Type conversion customization
 If you want to customize the type conversion from/to lua, specialize kaguya::lua_type_traits
 
 example: (this is already implemented for std::string per default)
@@ -407,7 +394,7 @@ template<>  struct lua_type_traits<std::string> {
 };
   ```
 
-#### Handling Errors
+#### 20. Handling Errors
 Encountered lua errors will be written to the console by default, but you can change this:
 ``` c++
 void HandleError(int errCode, const char * szError)
@@ -418,11 +405,11 @@ l.setErrorHandler(HandleError);
 l.dofile("./scripts/custom.lua"); // eg. accesing a non-existing file will invoke HandleError above
 ```
 
-## MAC下测试记录
+## 测试
+### Mac机器测试
 
-### 先安装lua：http://www.lua.org/versions.html#5.3
-
-### 回到工程目录下
+##### 1. 先安装lua：http://www.lua.org/versions.html#5.3
+##### 2. 回到工程目录下
 
 ```
 mkdir build
